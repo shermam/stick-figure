@@ -1,3 +1,7 @@
+interface Point {
+  x: number;
+  y: number;
+}
 export class Figure {
   private canvas: HTMLCanvasElement = document.createElement("canvas");
   private context: CanvasRenderingContext2D = this.canvas.getContext(
@@ -33,6 +37,7 @@ export class Figure {
     this.context.closePath();
 
     this.drawHead();
+    this.drawNeck();
     this.drawBody();
     this.drawRightArm();
     this.drawRightForearm();
@@ -46,134 +51,67 @@ export class Figure {
     this.externalCanvas.getContext("2d")?.drawImage(this.canvas, 0, 0);
   }
 
-  drawRightArm() {
+  private drawSegment(from: Point, to: Point) {
     this.context.beginPath();
     this.context.strokeStyle = this.color;
     this.context.lineWidth = this.size * 0.025;
     this.context.lineCap = "round";
-    this.context.moveTo(
-      this.articulations.shoulder.x,
-      this.articulations.shoulder.y
-    );
-    this.context.lineTo(
-      this.articulations.rightElbow.x,
-      this.articulations.rightElbow.y
-    );
+    this.context.moveTo(from.x, from.y);
+    this.context.lineTo(to.x, to.y);
     this.context.stroke();
     this.context.closePath();
   }
 
-  drawRightForearm() {
-    this.context.beginPath();
-    this.context.strokeStyle = this.color;
-    this.context.lineWidth = this.size * 0.025;
-    this.context.lineCap = "round";
-    this.context.moveTo(
-      this.articulations.rightElbow.x,
-      this.articulations.rightElbow.y
+  private drawRightArm() {
+    this.drawSegment(
+      this.articulations.shoulder,
+      this.articulations.rightElbow
     );
-    this.context.lineTo(
-      this.articulations.rightWrist.x,
-      this.articulations.rightWrist.y
-    );
-    this.context.stroke();
-    this.context.closePath();
   }
 
-  drawLeftArm() {
-    this.context.beginPath();
-    this.context.strokeStyle = this.color;
-    this.context.lineWidth = this.size * 0.025;
-    this.context.lineCap = "round";
-    this.context.moveTo(
-      this.articulations.shoulder.x,
-      this.articulations.shoulder.y
+  private drawRightForearm() {
+    this.drawSegment(
+      this.articulations.rightElbow,
+      this.articulations.rightWrist
     );
-    this.context.lineTo(
-      this.articulations.leftElbow.x,
-      this.articulations.leftElbow.y
-    );
-    this.context.stroke();
-    this.context.closePath();
   }
 
-  drawLeftForearm() {
-    this.context.beginPath();
-    this.context.strokeStyle = this.color;
-    this.context.lineWidth = this.size * 0.025;
-    this.context.lineCap = "round";
-    this.context.moveTo(
-      this.articulations.leftElbow.x,
-      this.articulations.leftElbow.y
-    );
-    this.context.lineTo(
-      this.articulations.leftWrist.x,
-      this.articulations.leftWrist.y
-    );
-    this.context.stroke();
-    this.context.closePath();
+  private drawLeftArm() {
+    this.drawSegment(this.articulations.shoulder, this.articulations.leftElbow);
   }
 
-  drawRightThigh() {
-    this.context.beginPath();
-    this.context.strokeStyle = this.color;
-    this.context.lineWidth = this.size * 0.025;
-    this.context.lineCap = "round";
-    this.context.moveTo(this.articulations.hip.x, this.articulations.hip.y);
-    this.context.lineTo(
-      this.articulations.rightKnee.x,
-      this.articulations.rightKnee.y
+  private drawLeftForearm() {
+    this.drawSegment(
+      this.articulations.leftElbow,
+      this.articulations.leftWrist
     );
-    this.context.stroke();
-    this.context.closePath();
   }
 
-  drawRightLeg() {
-    this.context.beginPath();
-    this.context.strokeStyle = this.color;
-    this.context.lineWidth = this.size * 0.025;
-    this.context.lineCap = "round";
-    this.context.moveTo(
-      this.articulations.rightKnee.x,
-      this.articulations.rightKnee.y
-    );
-    this.context.lineTo(
-      this.articulations.rightAnkle.x,
-      this.articulations.rightAnkle.y
-    );
-    this.context.stroke();
-    this.context.closePath();
+  private drawRightThigh() {
+    this.drawSegment(this.articulations.hip, this.articulations.rightKnee);
   }
 
-  drawLeftThigh() {
-    this.context.beginPath();
-    this.context.strokeStyle = this.color;
-    this.context.lineWidth = this.size * 0.025;
-    this.context.lineCap = "round";
-    this.context.moveTo(this.articulations.hip.x, this.articulations.hip.y);
-    this.context.lineTo(
-      this.articulations.leftKnee.x,
-      this.articulations.leftKnee.y
+  private drawRightLeg() {
+    this.drawSegment(
+      this.articulations.rightKnee,
+      this.articulations.rightAnkle
     );
-    this.context.stroke();
-    this.context.closePath();
   }
 
-  drawLeftLeg() {
-    this.context.beginPath();
-    this.context.strokeStyle = this.color;
-    this.context.lineWidth = this.size * 0.025;
-    this.context.lineCap = "round";
-    this.context.moveTo(
-      this.articulations.leftKnee.x,
-      this.articulations.leftKnee.y
-    );
-    this.context.lineTo(
-      this.articulations.leftAnkle.x,
-      this.articulations.leftAnkle.y
-    );
-    this.context.stroke();
-    this.context.closePath();
+  private drawLeftThigh() {
+    this.drawSegment(this.articulations.hip, this.articulations.leftKnee);
+  }
+
+  private drawLeftLeg() {
+    this.drawSegment(this.articulations.leftKnee, this.articulations.leftAnkle);
+  }
+
+  private drawBody() {
+    this.drawSegment(this.articulations.shoulder, this.articulations.hip);
+  }
+
+  private drawNeck() {
+    this.drawSegment(this.articulations.neck, this.articulations.shoulder);
   }
 
   private drawHead() {
@@ -185,19 +123,6 @@ export class Figure {
     const y = this.articulations.neck.y - radius;
     this.context.ellipse(x, y, radius, radius, 0, 0, Math.PI * 2);
     this.context.fill();
-    this.context.closePath();
-  }
-
-  private drawBody() {
-    this.context.beginPath();
-    this.context.strokeStyle = this.color;
-    const x = this.articulations.neck.x;
-    const y = this.articulations.neck.y;
-    this.context.lineWidth = this.size * 0.025;
-    this.context.lineCap = "round";
-    this.context.moveTo(x, y);
-    this.context.lineTo(this.articulations.hip.x, this.articulations.hip.y);
-    this.context.stroke();
     this.context.closePath();
   }
 }
