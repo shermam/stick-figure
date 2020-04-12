@@ -10,6 +10,7 @@ canvas.height = 500;
 const figure = new Figure(canvas, 500, "#000000");
 
 requestAnimationFrame(function loop() {
+  canvas.getContext("2d")?.clearRect(0, 0, canvas.width, canvas.height);
   figure.update();
   requestAnimationFrame(loop);
 });

@@ -30,11 +30,7 @@ export class Figure {
   }
 
   update() {
-    this.context.beginPath();
-    this.context.fillStyle = "#FFFF00";
-    this.context.rect(0, 0, this.size, this.size);
-    this.context.fill();
-    this.context.closePath();
+    this.context.clearRect(0, 0, this.size, this.size);
 
     this.drawHead();
     this.drawNeck();
