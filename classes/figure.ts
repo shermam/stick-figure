@@ -2,6 +2,7 @@ interface Point {
   x: number;
   y: number;
 }
+
 export class Figure {
   private canvas: HTMLCanvasElement = document.createElement("canvas");
   private context: CanvasRenderingContext2D = this.canvas.getContext(
@@ -50,7 +51,7 @@ export class Figure {
   private drawSegment(from: Point, to: Point) {
     this.context.beginPath();
     this.context.strokeStyle = this.color;
-    this.context.lineWidth = this.size * 0.025;
+    this.context.lineWidth = this.size * 0.01;
     this.context.lineCap = "round";
     this.context.moveTo(from.x, from.y);
     this.context.lineTo(to.x, to.y);
@@ -113,7 +114,7 @@ export class Figure {
   private drawHead() {
     this.context.beginPath();
     this.context.fillStyle = this.color;
-    const radius = this.size * 0.05;
+    const radius = this.size * 0.025;
     // TODO(sxmiranda): Account for body inclination
     const x = this.articulations.neck.x;
     const y = this.articulations.neck.y - radius;

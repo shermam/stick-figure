@@ -1,0 +1,12 @@
+video {
+  width: 700px;
+  height: 700px;
+  position: fixed;
+  margin-top: 50px;
+}
+
+canvas {
+  border: 1px solid black;
+  position: fixed;
+  margin-top: 50px;
+}
